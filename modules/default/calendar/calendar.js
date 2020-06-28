@@ -421,12 +421,14 @@ Module.register("calendar", {
 					}
 					locationRow.appendChild(endTimeCell);
 				}
-				if (event.location !== false) {
+				if (event.location && !event.fullDayEvent) {
 					var descCell = document.createElement("td");
 					descCell.className = "location";
-					descCell.colSpan = "1";
+					descCell.colSpan = "2";
 					descCell.innerHTML = event.location;
 					locationRow.appendChild(descCell);
+				} else if (event.location) {
+					descCell.colSpan = "1";
 				}
 
 				wrapper.appendChild(locationRow);
