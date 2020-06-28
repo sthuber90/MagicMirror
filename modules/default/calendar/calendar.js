@@ -405,7 +405,7 @@ Module.register("calendar", {
 
 				if (this.config.showEnd) {
 					var endTimeCell = document.createElement("td");
-					endTimeCell.className = "";
+					endTimeCell.className = "time";
 					endTimeCell.colSpan = "1";
 					if ((this.config.urgency > 1) && (event.startDate - now < (this.config.urgency * oneDay))) {
 						// This event falls within the config.urgency period that the user has set
