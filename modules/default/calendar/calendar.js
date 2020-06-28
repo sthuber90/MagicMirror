@@ -410,7 +410,8 @@ Module.register("calendar", {
 					if ((this.config.urgency > 1) && (event.startDate - now < (this.config.urgency * oneDay))) {
 						// This event falls within the config.urgency period that the user has set
 						if(event.fullDayEvent) {
-							endTimeCell.innerHTML += this.translate("ALL_DAY");
+							// do not show
+							// endTimeCell.innerHTML += this.translate("ALL_DAY");
 						} else {
 							endTimeCell.innerHTML += "->";
 							endTimeCell.innerHTML += this.capFirst(moment(event.endDate, "x").format('HH:mm'));
