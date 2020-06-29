@@ -547,7 +547,7 @@ Module.register("calendar", {
 						midnightUtc = moment(midnightUtc, "x").add(1, "day").format("x"); // next day
 					}
 					// Last day
-					event.title += " (" + count + "/" + maxCount + ")";
+					// event.title += " (" + count + "/" + maxCount + ")";
 					splitEvents.push(event);
 
 					for (event of splitEvents) {
