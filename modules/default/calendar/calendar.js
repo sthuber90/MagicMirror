@@ -409,12 +409,12 @@ Module.register("calendar", {
 					endTimeCell.colSpan = "1";
 					if ((this.config.urgency > 1) && (event.startDate - now < (this.config.urgency * oneDay))) {
 						// This event falls within the config.urgency period that the user has set
-						if(event.fullDayEvent) {
+						if (event.fullDayEvent) {
 							// do not show
 							// endTimeCell.innerHTML += this.translate("ALL_DAY");
 						} else {
 							endTimeCell.innerHTML += "->";
-							endTimeCell.innerHTML += this.capFirst(moment(event.endDate, "x").format('HH:mm'));
+							endTimeCell.innerHTML += this.capFirst(moment(event.endDate, "x").format("HH:mm"));
 						}
 					} else {
 						endTimeCell.innerHTML += this.capFirst(moment(event.endDate, "x").format(this.config.fullDayEventDateFormat));
@@ -438,10 +438,10 @@ Module.register("calendar", {
 					locationRow.style.opacity = 1 - (1 / fadeSteps * currentFadeStep);
 				}
 			}
-	}
+		}
 
 		return wrapper;
-},
+	},
 
 	/**
 	 * This function accepts a number (either 12 or 24) and returns a moment.js LocaleSpecification with the
@@ -453,18 +453,18 @@ Module.register("calendar", {
 	 */
 	getLocaleSpecification: function (timeFormat) {
 		switch (timeFormat) {
-			case 12: {
-				return { longDateFormat: { LT: "h:mm A" } };
-				break;
-			}
-			case 24: {
-				return { longDateFormat: { LT: "HH:mm" } };
-				break;
-			}
-			default: {
-				return { longDateFormat: { LT: moment.localeData().longDateFormat("LT") } };
-				break;
-			}
+		case 12: {
+			return { longDateFormat: { LT: "h:mm A" } };
+			break;
+		}
+		case 24: {
+			return { longDateFormat: { LT: "HH:mm" } };
+			break;
+		}
+		default: {
+			return { longDateFormat: { LT: moment.localeData().longDateFormat("LT") } };
+			break;
+		}
 		}
 	},
 
@@ -498,7 +498,7 @@ Module.register("calendar", {
 		var future = moment().startOf("day").add(this.config.maximumNumberOfDays, "days").toDate();
 		for (var c in this.calendarData) {
 			var calendar = this.calendarData[c];
-			
+
 			for (var e in calendar) {
 				var event = JSON.parse(JSON.stringify(calendar[e])); // clone object
 
@@ -567,13 +567,13 @@ Module.register("calendar", {
 		return events.slice(0, this.config.maximumEntries);
 	},
 
-	isTomorrow: function(startDate) {
+	isTomorrow: function (startDate) {
 		const start = moment(startDate, "x");
 		const now = moment(new Date());
 
-		return start.get("year") === now.get("year") 
-			&& start.get("month") === now.get("month") 
-			&& start.get("date") === now.get("date")+1
+		return start.get("year") === now.get("year")
+			&& start.get("month") === now.get("month")
+			&& start.get("date") === now.get("date") + 1;
 	},
 
 	listContainsEvent: function (eventList, event) {
