@@ -99,7 +99,7 @@ Module.register("calendar", {
 			}
 
 			// we check user and password here for backwards compatibility with old configs
-			if(calendar.user && calendar.pass) {
+			if (calendar.user && calendar.pass) {
 				Log.warn("Deprecation warning: Please update your calendar authentication configuration.");
 				Log.warn("https://github.com/MichMich/MagicMirror/tree/v2.1.2/modules/default/calendar#calendar-authentication-options");
 				calendar.auth = {
@@ -113,7 +113,7 @@ Module.register("calendar", {
 			// Trigger ADD_CALENDAR every fetchInterval to make sure there is always a calendar
 			// fetcher running on the server side.
 			var self = this;
-			setInterval(function() {
+			setInterval(function () {
 				self.addCalendar(calendar.url, calendar.auth, calendarConfig);
 			}, self.config.fetchInterval);
 		}
@@ -170,10 +170,23 @@ Module.register("calendar", {
 		for (var e in events) {
 			var event = events[e];
 			var dateAsString = moment(event.startDate, "x").format(this.config.dateFormat);
-			if(this.config.timeFormat === "dateheaders"){
-				if(lastSeenDate !== dateAsString){
+			if (this.config.timeFormat === "dateheaders") {
+				var now = new Date();
+				// Define second, minute, hour, and day variables
+				var oneSecond = 1000; // 1,000 milliseconds
+				var oneMinute = oneSecond * 60;
+				var oneHour = oneMinute * 60;
+				var oneDay = oneHour * 24;
+
+				if (event.today) {
+					dateAsString = this.capFirst(this.translate("TODAY")).toUpperCase();
+				} else if (this.isTomorrow(event.startDate)) {
+					dateAsString = this.capFirst(this.translate("TOMORROW")).toUpperCase();
+				}
+
+				if (lastSeenDate !== dateAsString) {
 					var dateRow = document.createElement("tr");
-					dateRow.className = "normal";
+					dateRow.className = "normal light";
 					var dateCell = document.createElement("td");
 
 					dateCell.colSpan = "3";
@@ -210,20 +223,20 @@ Module.register("calendar", {
 				symbolWrapper.className = "symbol align-right " + symbolClass;
 
 				var symbols = this.symbolsForUrl(event.url);
-				if(typeof symbols === "string") {
+				if (typeof symbols === "string") {
 					symbols = [symbols];
 				}
 
-				for(var i = 0; i < symbols.length; i++) {
+				for (var i = 0; i < symbols.length; i++) {
 					var symbol = document.createElement("span");
 					symbol.className = "fa fa-fw fa-" + symbols[i];
-					if(i > 0){
+					if (i > 0) {
 						symbol.style.paddingLeft = "5px";
 					}
 					symbolWrapper.appendChild(symbol);
 				}
 				eventWrapper.appendChild(symbolWrapper);
-			} else if(this.config.timeFormat === "dateheaders"){
+			} else if (this.config.timeFormat === "dateheaders") {
 				var blankCell = document.createElement("td");
 				blankCell.innerHTML = "&nbsp;&nbsp;&nbsp;";
 				eventWrapper.appendChild(blankCell);
@@ -249,19 +262,16 @@ Module.register("calendar", {
 			var titleClass = this.titleClassForUrl(event.url);
 
 			if (!this.config.colored) {
-				titleWrapper.className = "title bright " + titleClass;
+				titleWrapper.className = "title bright align-left" + titleClass;
 			} else {
-				titleWrapper.className = "title " + titleClass;
+				titleWrapper.className = "title align-left" + titleClass;
 			}
 
-			if(this.config.timeFormat === "dateheaders"){
-
+			if (this.config.timeFormat === "dateheaders") {
 				if (event.fullDayEvent) {
 					titleWrapper.colSpan = "2";
 					titleWrapper.align = "left";
-
 				} else {
-
 					var timeClass = this.timeClassForUrl(event.url);
 					var timeWrapper = document.createElement("td");
 					timeWrapper.className = "time light " + timeClass;
@@ -289,7 +299,7 @@ Module.register("calendar", {
 					event.endDate -= oneSecond;
 					if (event.today) {
 						timeWrapper.innerHTML = this.capFirst(this.translate("TODAY"));
-					} else if (event.startDate - now < oneDay && event.startDate - now > 0) {
+					} else if (this.isTomorrow(event.startDate)) {
 						timeWrapper.innerHTML = this.capFirst(this.translate("TOMORROW"));
 					} else if (event.startDate - now < 2 * oneDay && event.startDate - now > 0) {
 						if (this.translate("DAYAFTERTOMORROW") !== "DAYAFTERTOMORROW") {
@@ -316,9 +326,10 @@ Module.register("calendar", {
 							timeWrapper.innerHTML = this.capFirst(moment(event.startDate, "x").from(moment().format("YYYYMMDD")));
 						}
 					}
-					if(this.config.showEnd){
-						timeWrapper.innerHTML += "-" ;
-						timeWrapper.innerHTML += this.capFirst(moment(event.endDate , "x").format(this.config.fullDayEventDateFormat));
+
+					if (this.config.showEnd) {
+						timeWrapper.innerHTML += "-";
+						timeWrapper.innerHTML += this.capFirst(moment(event.endDate, "x").format(this.config.fullDayEventDateFormat));
 					}
 				} else {
 					if (event.startDate >= new Date()) {
@@ -328,7 +339,7 @@ Module.register("calendar", {
 								// If event is within 6 hour, display 'in xxx' time format or moment.fromNow()
 								timeWrapper.innerHTML = this.capFirst(moment(event.startDate, "x").fromNow());
 							} else {
-								if(this.config.timeFormat === "absolute" && !this.config.nextDaysRelative) {
+								if (this.config.timeFormat === "absolute" && !this.config.nextDaysRelative) {
 									timeWrapper.innerHTML = this.capFirst(moment(event.startDate, "x").format(this.config.dateFormat));
 								} else {
 									// Otherwise just say 'Today/Tomorrow at such-n-such time'
@@ -384,27 +395,47 @@ Module.register("calendar", {
 			}
 
 			if (this.config.showLocation) {
-				if (event.location !== false) {
-					var locationRow = document.createElement("tr");
-					locationRow.className = "normal xsmall light";
+				var locationRow = document.createElement("tr");
+				locationRow.className = "normal xsmall light";
 
-					if (this.config.displaySymbol) {
-						var symbolCell = document.createElement("td");
-						locationRow.appendChild(symbolCell);
+				if (this.config.displaySymbol) {
+					var symbolCell = document.createElement("td");
+					locationRow.appendChild(symbolCell);
+				}
+
+				if (this.config.showEnd && !event.fullDayEvent) {
+					var endTimeCell = document.createElement("td");
+					endTimeCell.className = "time";
+					endTimeCell.colSpan = "1";
+					if ((this.config.urgency > 1) && (event.startDate - now < (this.config.urgency * oneDay))) {
+						// This event falls within the config.urgency period that the user has set
+						if (event.fullDayEvent) {
+							// do not show
+							// endTimeCell.innerHTML += this.translate("ALL_DAY");
+						} else {
+							endTimeCell.innerHTML += "->";
+							endTimeCell.innerHTML += this.capFirst(moment(event.endDate, "x").format("HH:mm"));
+						}
+					} else {
+						endTimeCell.innerHTML += this.capFirst(moment(event.endDate, "x").format(this.config.fullDayEventDateFormat));
 					}
-
+					locationRow.appendChild(endTimeCell);
+				}
+				if (event.location && !event.fullDayEvent) {
 					var descCell = document.createElement("td");
 					descCell.className = "location";
 					descCell.colSpan = "2";
 					descCell.innerHTML = event.location;
 					locationRow.appendChild(descCell);
+				} else if (event.location) {
+					descCell.colSpan = "1";
+				}
 
-					wrapper.appendChild(locationRow);
+				wrapper.appendChild(locationRow);
 
-					if (e >= startFade) {
-						currentFadeStep = e - startFade;
-						locationRow.style.opacity = 1 - (1 / fadeSteps * currentFadeStep);
-					}
+				if (e >= startFade) {
+					currentFadeStep = e - startFade;
+					locationRow.style.opacity = 1 - (1 / fadeSteps * currentFadeStep);
 				}
 			}
 		}
@@ -420,18 +451,18 @@ Module.register("calendar", {
 	 * @param {number} timeFormat Specifies either 12 or 24 hour time format
 	 * @returns {moment.LocaleSpecification}
 	 */
-	getLocaleSpecification: function(timeFormat) {
+	getLocaleSpecification: function (timeFormat) {
 		switch (timeFormat) {
 		case 12: {
-			return { longDateFormat: {LT: "h:mm A"} };
+			return { longDateFormat: { LT: "h:mm A" } };
 			break;
 		}
 		case 24: {
-			return { longDateFormat: {LT: "HH:mm"} };
+			return { longDateFormat: { LT: "HH:mm" } };
 			break;
 		}
 		default: {
-			return { longDateFormat: {LT: moment.localeData().longDateFormat("LT")} };
+			return { longDateFormat: { LT: moment.localeData().longDateFormat("LT") } };
 			break;
 		}
 		}
@@ -467,49 +498,56 @@ Module.register("calendar", {
 		var future = moment().startOf("day").add(this.config.maximumNumberOfDays, "days").toDate();
 		for (var c in this.calendarData) {
 			var calendar = this.calendarData[c];
+
 			for (var e in calendar) {
 				var event = JSON.parse(JSON.stringify(calendar[e])); // clone object
-				if(event.endDate < now) {
+
+				let offset = - (new Date()).getTimezoneOffset();
+				const utcEndDate = moment(event.endDate, "x").clone().subtract(offset, "minutes").subtract(1, "second").format("x");
+				const utcStartDate = moment(event.startDate, "x").clone().subtract(offset, "minutes").endOf("day").format("x");
+				const oneDay = 1000 * 60 * 60 * 24;
+
+				if (event.endDate < now) {
 					continue;
 				}
-				if(this.config.hidePrivate) {
-					if(event.class === "PRIVATE") {
-						  // do not add the current event, skip it
-						  continue;
-					}
-				}
-				if(this.config.hideOngoing) {
-					if(event.startDate < now) {
+				if (this.config.hidePrivate) {
+					if (event.class === "PRIVATE") {
+						// do not add the current event, skip it
 						continue;
 					}
 				}
-				if(this.listContainsEvent(events,event)){
+				if (this.config.hideOngoing) {
+					if (event.startDate < now) {
+						continue;
+					}
+				}
+				if (this.listContainsEvent(events, event)) {
 					continue;
 				}
 				event.url = c;
-				event.today = event.startDate >= today && event.startDate < (today + 24 * 60 * 60 * 1000);
+				event.today = event.startDate >= today && event.startDate < (today + oneDay);
 
 				/* if sliceMultiDayEvents is set to true, multiday events (events exceeding at least one midnight) are sliced into days,
 				* otherwise, esp. in dateheaders mode it is not clear how long these events are.
 				*/
-				var maxCount = Math.ceil(((event.endDate - 1) - moment(event.startDate, "x").endOf("day").format("x"))/(1000*60*60*24)) + 1;
+				let maxCount = Math.ceil((utcEndDate - utcStartDate) / oneDay) + 1;
 				if (this.config.sliceMultiDayEvents && maxCount > 1) {
 					var splitEvents = [];
-					var midnight = moment(event.startDate, "x").clone().startOf("day").add(1, "day").format("x");
+					var midnightUtc = moment(event.startDate, "x").clone().subtract(offset, "minutes").startOf("day").add(1, "day").format("x");
 					var count = 1;
-					while (event.endDate > midnight) {
+					while (utcEndDate > midnightUtc) {
 						var thisEvent = JSON.parse(JSON.stringify(event)); // clone object
-						thisEvent.today = thisEvent.startDate >= today && thisEvent.startDate < (today + 24 * 60 * 60 * 1000);
-						thisEvent.endDate = midnight;
-						thisEvent.title += " (" + count + "/" + maxCount + ")";
+						thisEvent.today = thisEvent.startDate >= today && thisEvent.startDate < (today + oneDay);
+						thisEvent.endDate = midnightUtc;
+						// thisEvent.title += " (" + count + "/" + maxCount + ")";
 						splitEvents.push(thisEvent);
 
-						event.startDate = midnight;
+						event.startDate = midnightUtc;
 						count += 1;
-						midnight = moment(midnight, "x").add(1, "day").format("x"); // next day
+						midnightUtc = moment(midnightUtc, "x").add(1, "day").format("x"); // next day
 					}
 					// Last day
-					event.title += " ("+count+"/"+maxCount+")";
+					// event.title += " (" + count + "/" + maxCount + ")";
 					splitEvents.push(event);
 
 					for (event of splitEvents) {
@@ -529,9 +567,18 @@ Module.register("calendar", {
 		return events.slice(0, this.config.maximumEntries);
 	},
 
-	listContainsEvent: function(eventList, event){
-		for(var evt of eventList){
-			if(evt.title === event.title && parseInt(evt.startDate) === parseInt(event.startDate)){
+	isTomorrow: function (startDate) {
+		const start = moment(startDate, "x");
+		const now = moment(new Date());
+
+		return start.get("year") === now.get("year")
+			&& start.get("month") === now.get("month")
+			&& start.get("date") === now.get("date") + 1;
+	},
+
+	listContainsEvent: function (eventList, event) {
+		for (var evt of eventList) {
+			if (evt.title === event.title && parseInt(evt.startDate) === parseInt(event.startDate)) {
 				return true;
 			}
 		}
@@ -734,8 +781,8 @@ Module.register("calendar", {
 
 			var regParts = needle.match(/^\/(.+)\/([gim]*)$/);
 			if (regParts) {
-			  // the parsed pattern is a regexp.
-			  needle = new RegExp(regParts[1], regParts[2]);
+				// the parsed pattern is a regexp.
+				needle = new RegExp(regParts[1], regParts[2]);
 			}
 
 			title = title.replace(needle, replacement);
@@ -763,7 +810,7 @@ Module.register("calendar", {
 			}
 		}
 
-		eventList.sort(function(a,b) {
+		eventList.sort(function (a, b) {
 			return a.startDate - b.startDate;
 		});
 

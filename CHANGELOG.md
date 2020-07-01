@@ -8,7 +8,12 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ## [] -
 ### Changed
 - Improves backwards compatibility for Safari < 11
+- Calendar `dateheaders` shows relative date for today and tomorrow
+- `showEnd` works with all day events and `dateheaders` time format
 
+### Fixed
+- whole day events are split with UTC
+ 
 ## [2.11.0] - 2020-04-01
 
 🚨 READ THIS BEFORE UPDATING 🚨
