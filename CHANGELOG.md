@@ -5,7 +5,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ❤️ **Donate:** Enjoying MagicMirror²? [Please consider a donation!](https://magicmirror.builders/donate) With your help we can continue to improve the MagicMirror²
 
-## [] -
+## [2.11.1] - 2020-07-03
 ### Changed
 - Improves backwards compatibility for Safari < 11
 - Calendar `dateheaders` shows relative date for today and tomorrow
