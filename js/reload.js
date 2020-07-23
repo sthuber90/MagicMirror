@@ -18,14 +18,14 @@ var lastInterval = getTime();
 // 	});
 // });
 
-/* if time difference is more than 45 seconds refresh page. Check every 15 seconds <- THIS MUST BE SMALLER THAN DIFF */
+/* if time difference is more than 45 seconds refresh page. Check every 500 milliseconds <- THIS MUST BE SMALLER THAN DIFF */
 setInterval(function () {
 	const now = getTime();
 	Log.info("Set Interval Reloader");
-	Log.log(`Now: ${now} - Last Interval: ${lastInterval} - Diff: ${now - lastInterval} < 45sec?`);
-	if (!document.hidden && now - lastInterval > 45000) {
+	Log.log(`Now: ${now} - Last Interval: ${lastInterval} - Diff: ${now - lastInterval} < 59sec?`);
+	if (!document.hidden && now - lastInterval > 59000) {
 		Log.info("RELOAD!");
 		location.reload();
 	}
 	lastInterval = now;
-}, 15000);
+}, 500);
