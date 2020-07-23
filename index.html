@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 	<title>MagicMirror²</title>
 	<meta name="google" content="notranslate" />
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
 
 	<meta name="apple-mobile-web-app-capable" content="yes">
-	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 	<meta name="format-detection" content="telephone=no">
 	<meta name="mobile-web-app-capable" content="yes">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 	<link rel="icon" href="data:;base64,iVBORw0KGgo=">
 	<link rel="stylesheet" type="text/css" href="css/main.css">
@@ -17,27 +19,83 @@
 
 	<script type="text/javascript">
 		var version = "#VERSION#";
+		// window.addEventListener("focus", function () { console.log("FOCUS") })
+		// window.addEventListener("blur", function () { console.log("BLUR") })
+		// window.addEventListener("pageshow", function () { console.log("pageshow") })
+		// window.addEventListener("beforeunload", function () { console.log("beforeunload") })
+		// window.addEventListener("error", function (event) {
+		// 	console.log("error");
+		// 	console.log(JSON.stringify(event, null, 2))
+		// })
+		// window.addEventListener("devicelight", function () { console.log("devicelight") })
+		// // floods the logs
+		// // window.addEventListener("deviceorientation", function () { console.log("deviceorientation") })
+		// window.addEventListener("click", function () { console.log("CLICK") })
+		// document.addEventListener("visibilitychange", function () { console.log("visibilitychange") })
+		// document.addEventListener("hidden", function () { console.log("hidden") })
+		// document.addEventListener("touchstart", function () { console.log("touchstart") })
+		// document.addEventListener("touchcancel", function () { console.log("touchcancel") })
+		// document.addEventListener("touchend", function () { console.log("touchend") })
+		// document.addEventListener("touchmove", function () { console.log("touchmove") })
+		// document.addEventListener("end", function () { console.log("end") })
+		// window.addEventListener("end", function () { console.log("end") })
+		// document.addEventListener("load", function () { console.log("load") })
+		// document.addEventListener("unload", function () { console.log("unload") })
+		// window.addEventListener("load", function () { console.log("load1") })
+		// window.addEventListener("unload", function () { console.log("unload1") })
+		// document.addEventListener("pagehide", function () { console.log("pagehide") })
+		// document.addEventListener("pageshow", function () { console.log("pageshow") })
+		// document.addEventListener("reset", function () { console.log("reset") })
+		// document.addEventListener("play", function () { console.log("play") })
+		// document.addEventListener("pause", function () { console.log("pause") })
+		// window.addEventListener("pagehide", function () { console.log("pagehide1") })
+		// window.addEventListener("pageshow", function () { console.log("pageshow1") })
+		// window.addEventListener("orientationchange", function () { console.log("orientationchange") })
 	</script>
+
 	<!-- <script src="http://192.168.178.63:1337/vorlon.js"></script> -->
 </head>
+
 <body>
-	<div class="region fullscreen below"><div class="container"></div></div>
+	<div class="region fullscreen below">
+		<div class="container"></div>
+	</div>
 	<div class="region top bar">
 		<div class="container"></div>
-		<div class="region top left"><div class="container"></div></div>
-		<div class="region top center"><div class="container"></div></div>
-		<div class="region top right"><div class="container"></div></div>
+		<div class="region top left">
+			<div class="container"></div>
+		</div>
+		<div class="region top center">
+			<div class="container"></div>
+		</div>
+		<div class="region top right">
+			<div class="container"></div>
+		</div>
 	</div>
-	<div class="region upper third"><div class="container"></div></div>
-	<div class="region middle center"><div class="container"></div></div>
-	<div class="region lower third"><div class="container"><br/></div></div>
+	<div class="region upper third">
+		<div class="container"></div>
+	</div>
+	<div class="region middle center">
+		<div class="container"></div>
+	</div>
+	<div class="region lower third">
+		<div class="container"><br /></div>
+	</div>
 	<div class="region bottom bar">
 		<div class="container"></div>
-		<div class="region bottom left"><div class="container"></div></div>
-		<div class="region bottom center"><div class="container"></div></div>
-		<div class="region bottom right"><div class="container"></div></div>
+		<div class="region bottom left">
+			<div class="container"></div>
+		</div>
+		<div class="region bottom center">
+			<div class="container"></div>
+		</div>
+		<div class="region bottom right">
+			<div class="container"></div>
+		</div>
 	</div>
-	<div class="region fullscreen above"><div class="container"></div></div>
+	<div class="region fullscreen above">
+		<div class="container"></div>
+	</div>
 	<script type="text/javascript" src="socket.io/socket.io.js"></script>
 	<script type="text/javascript" src="vendor/node_modules/nunjucks/browser/nunjucks.min.js"></script>
 	<script type="text/javascript" src="js/defaults.js"></script>
@@ -54,4 +112,5 @@
 	<script type="text/javascript" src="js/reload.js"></script>
 	<script type="text/javascript" src="js/main.js"></script>
 </body>
+
 </html>

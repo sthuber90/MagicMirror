@@ -6,13 +6,25 @@ function getTime() {
 
 var lastInterval = getTime();
 
-["visibilitychange", "msvisibilitychange", "webkitvisibilitychange"].forEach(function (event) {
-	document.addEventListener(event, function () {
-		const now = getTime();
-		Log.log(`Now: ${now} - Last Interval: ${lastInterval} - Diff: ${now - lastInterval} < 45sec?`);
-		if (!document.hidden && now - lastInterval >= 45000) {
-			location.reload();
-		}
-		lastInterval = now;
-	});
-});
+// is not supported when page is used as home screen app on iOS
+// ["visibilitychange", "msvisibilitychange", "webkitvisibilitychange"].forEach(function (event) {
+// 	document.addEventListener(event, function () {
+// 		const now = getTime();
+// 		Log.log(`Now: ${now} - Last Interval: ${lastInterval} - Diff: ${now - lastInterval} < 45sec?`);
+// 		if (!document.hidden && now - lastInterval >= 45000) {
+// 			location.reload();
+// 		}
+// 		lastInterval = now;
+// 	});
+// });
+
+setInterval(function () {
+	const now = getTime();
+	Log.info("Set Interval Reloader");
+	Log.log(`Now: ${now} - Last Interval: ${lastInterval} - Diff: ${now - lastInterval} < 45sec?`);
+	if (!document.hidden && now - lastInterval >= 45000) {
+		Log.warn("RELOAD!");
+		location.reload();
+	}
+	lastInterval = now;
+}, 45000);
