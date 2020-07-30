@@ -1,5 +1,4 @@
 // add functionality to refresh page if JS was stopped, because for instance screen was logged or something the like
-
 function getTime() {
 	return new Date().getTime();
 }
