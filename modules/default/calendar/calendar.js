@@ -501,10 +501,7 @@ Module.register("calendar", {
 
 			for (var e in calendar) {
 				var event = JSON.parse(JSON.stringify(calendar[e])); // clone object
-
 				let offset = - (new Date()).getTimezoneOffset();
-				const utcEndDate = moment(event.endDate, "x").clone().subtract(offset, "minutes").subtract(1, "second").format("x");
-				const utcStartDate = moment(event.startDate, "x").clone().subtract(offset, "minutes").endOf("day").format("x");
 				const oneDay = 1000 * 60 * 60 * 24;
 
 				if (event.endDate < now) {
@@ -530,12 +527,12 @@ Module.register("calendar", {
 				/* if sliceMultiDayEvents is set to true, multiday events (events exceeding at least one midnight) are sliced into days,
 				* otherwise, esp. in dateheaders mode it is not clear how long these events are.
 				*/
-				let maxCount = Math.ceil((utcEndDate - utcStartDate) / oneDay) + 1;
+				let maxCount = Math.ceil((event.endDate - event.startDate) / oneDay) + 1;
 				if (this.config.sliceMultiDayEvents && maxCount > 1) {
 					var splitEvents = [];
-					var midnightUtc = moment(event.startDate, "x").clone().subtract(offset, "minutes").startOf("day").add(1, "day").format("x");
+					var midnightUtc = moment(event.startDate, "x").clone().startOf("day").add(1, "day").format("x");
 					var count = 1;
-					while (utcEndDate > midnightUtc) {
+					while (event.endDate > midnightUtc) {
 						var thisEvent = JSON.parse(JSON.stringify(event)); // clone object
 						thisEvent.today = thisEvent.startDate >= today && thisEvent.startDate < (today + oneDay);
 						thisEvent.endDate = midnightUtc;
@@ -549,7 +546,6 @@ Module.register("calendar", {
 					// Last day
 					// event.title += " (" + count + "/" + maxCount + ")";
 					splitEvents.push(event);
-
 					for (event of splitEvents) {
 						if ((event.endDate > now) && (event.endDate <= future)) {
 							events.push(event);
