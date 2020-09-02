@@ -5,6 +5,11 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ❤️ **Donate:** Enjoying MagicMirror²? [Please consider a donation!](https://magicmirror.builders/donate) With your help we can continue to improve the MagicMirror²
 
+## [2.12.2] - 2020-09-02
+### Fixed
+- Undefined variable in calendar on whole day event
+
+
 ## [2.12.1] - 2020-08-30
 ### Fixed
 - Presentation of (repeating) whole day events in calendar

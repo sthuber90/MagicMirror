@@ -1,6 +1,6 @@
 {
   "name": "magicmirror",
-  "version": "2.12.1",
+  "version": "2.12.2",
   "description": "The open source modular smart mirror platform.",
   "main": "js/electron.js",
   "scripts": {
@@ -18,7 +18,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/MichMich/MagicMirror.git"
+    "url": "git+https://github.com/sthuber90/MagicMirror.git"
   },
   "keywords": [
     "magic mirror",
@@ -28,11 +28,11 @@
   ],
   "author": "Michael Teeuw",
   "contributors": [
-    "https://github.com/MichMich/MagicMirror/graphs/contributors"
+    "https://github.com/sthuber90/MagicMirror/graphs/contributors"
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/MichMich/MagicMirror/issues"
+    "url": "https://github.com/sthuber90/MagicMirror/issues"
   },
   "homepage": "https://magicmirror.builders",
   "devDependencies": {

@@ -421,8 +421,8 @@ Module.register("calendar", {
 					}
 					locationRow.appendChild(endTimeCell);
 				}
+				var descCell = document.createElement("td");
 				if (event.location && !event.fullDayEvent) {
-					var descCell = document.createElement("td");
 					descCell.className = "location";
 					descCell.colSpan = "2";
 					descCell.innerHTML = event.location;
