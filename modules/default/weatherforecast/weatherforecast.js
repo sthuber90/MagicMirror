@@ -360,7 +360,8 @@ Module.register("weatherforecast",{
 				lastDay = day;
 
 				// Stop processing when maxNumberOfDays is reached
-				if (this.forecast.length === this.config.maxNumberOfDays) {
+				if (this.forecast.length === this.config.maxNumberOfDays+1) {
+					this.forecast.pop();
 					break;
 				}
 			} else {
