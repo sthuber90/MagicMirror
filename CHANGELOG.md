@@ -5,6 +5,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ❤️ **Donate:** Enjoying MagicMirror²? [Please consider a donation!](https://magicmirror.builders/donate) With your help we can continue to improve the MagicMirror²
 
+## [2.12.4] - 2020-09-07
+### Fixed
+- "Today" logic for full day event across multiple days. Caused TODAY to show up multiple times in dateheader mode
+
 ## [2.12.3] - 2020-09-03
 ### Fixed
 - Show full forecast for last day with weatherforecast module

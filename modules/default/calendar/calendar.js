@@ -179,6 +179,7 @@ Module.register("calendar", {
 				var oneDay = oneHour * 24;
 
 				if (event.today) {
+					event.title += "-T";
 					dateAsString = this.capFirst(this.translate("TODAY")).toUpperCase();
 				} else if (this.isTomorrow(event.startDate)) {
 					dateAsString = this.capFirst(this.translate("TOMORROW")).toUpperCase();
@@ -527,27 +528,33 @@ Module.register("calendar", {
 				/* if sliceMultiDayEvents is set to true, multiday events (events exceeding at least one midnight) are sliced into days,
 				* otherwise, esp. in dateheaders mode it is not clear how long these events are.
 				*/
-				let maxCount = Math.ceil((event.endDate - event.startDate) / oneDay) + 1;
+				/* if sliceMultiDayEvents is set to true, multiday events (events exceeding at least one midnight) are sliced into days,
+				 * otherwise, esp. in dateheaders mode it is not clear how long these events are.
+				 */
+				var maxCount = Math.ceil((event.endDate - 1 - moment(event.startDate, "x").endOf("day").format("x")) / oneDay) + 1;
 				if (this.config.sliceMultiDayEvents && maxCount > 1) {
 					var splitEvents = [];
-					var midnightUtc = moment(event.startDate, "x").clone().startOf("day").add(1, "day").format("x");
+					var midnight = moment(event.startDate, "x").clone().startOf("day").add(1, "day").format("x");
 					var count = 1;
-					while (event.endDate > midnightUtc) {
+					while (event.endDate > midnight) {
 						var thisEvent = JSON.parse(JSON.stringify(event)); // clone object
-						thisEvent.today = thisEvent.startDate >= today && thisEvent.startDate < (today + oneDay);
-						thisEvent.endDate = midnightUtc;
-						// thisEvent.title += " (" + count + "/" + maxCount + ")";
+						// console.log(`${event.title} - ${count}/${maxCount} - ${thisEvent.startDate >= today} - ${thisEvent.startDate < today + oneDay}`);
+						thisEvent.today = thisEvent.startDate >= today && thisEvent.startDate < today + oneDay;
+						thisEvent.endDate = midnight;
+						thisEvent.title += " (" + count + "/" + maxCount + ")";
 						splitEvents.push(thisEvent);
 
-						event.startDate = midnightUtc;
+						event.startDate = midnight;
 						count += 1;
-						midnightUtc = moment(midnightUtc, "x").add(1, "day").format("x"); // next day
+						midnight = moment(midnight, "x").add(1, "day").format("x"); // next day
 					}
 					// Last day
-					// event.title += " (" + count + "/" + maxCount + ")";
+					event.title += " (" + count + "/" + maxCount + ")";
+					event.today = event.startDate >= today && event.startDate < today + oneDay;
 					splitEvents.push(event);
+
 					for (event of splitEvents) {
-						if ((event.endDate > now) && (event.endDate <= future)) {
+						if (event.endDate > now && event.endDate <= future) {
 							events.push(event);
 						}
 					}
