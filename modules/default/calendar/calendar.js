@@ -540,7 +540,7 @@ Module.register("calendar", {
 						// console.log(`${event.title} - ${count}/${maxCount} - ${thisEvent.startDate >= today} - ${thisEvent.startDate < today + oneDay}`);
 						thisEvent.today = thisEvent.startDate >= today && thisEvent.startDate < today + oneDay;
 						thisEvent.endDate = midnight;
-						thisEvent.title += " (" + count + "/" + maxCount + ")";
+						// thisEvent.title += " (" + count + "/" + maxCount + ")";
 						splitEvents.push(thisEvent);
 
 						event.startDate = midnight;
@@ -548,7 +548,7 @@ Module.register("calendar", {
 						midnight = moment(midnight, "x").add(1, "day").format("x"); // next day
 					}
 					// Last day
-					event.title += " (" + count + "/" + maxCount + ")";
+					// event.title += " (" + count + "/" + maxCount + ")";
 					event.today = event.startDate >= today && event.startDate < today + oneDay;
 					splitEvents.push(event);
 
