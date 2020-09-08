@@ -179,7 +179,6 @@ Module.register("calendar", {
 				var oneDay = oneHour * 24;
 
 				if (event.today) {
-					event.title += "-T";
 					dateAsString = this.capFirst(this.translate("TODAY")).toUpperCase();
 				} else if (this.isTomorrow(event.startDate)) {
 					dateAsString = this.capFirst(this.translate("TOMORROW")).toUpperCase();
